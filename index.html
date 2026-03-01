@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Click Speed Test</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f9d423, #ff4e50);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.container {
+    background: rgba(0,0,0,0.75);
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 450px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(0,0,0,0.7);
+    position: relative;
+}
+
+h1 {
+    font-size: 2.2em;
+    color: #ffef96;
+}
+
+.time-options button {
+    margin: 5px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #1dd1a1, #10ac84);
+    color: white;
+    cursor: pointer;
+}
+
+#clickBox {
+    margin-top: 20px;
+    padding: 50px;
+    background: radial-gradient(circle, #ff6b81, #ee5253);
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+#clickBox:active {
+    transform: scale(0.95);
+}
+
+.start-btn {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border-radius: 15px;
+    border: none;
+    background: linear-gradient(135deg, #f368e0, #ff9ff3);
+    color: white;
+    cursor: pointer;
+}
+
+.stats {
+    margin-top: 20px;
+}
+
+#ceoTag {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    font-weight: 700;
+    text-shadow: 0 0 10px #fff, 0 0 20px #ff9ff3;
+}
+
+#countdownOverlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+}
+
+/* confetti */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: 0;
+    border-radius: 50%;
+    animation: fall 3s linear forwards;
+}
+@keyframes fall {
+    to { transform: translateY(100vh); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="ceoTag">CEO:- Umar Khan</div>
+
+<div class="container">
+<h1>Ultimate Click Speed Test</h1>
+
+<div class="time-options">
+<button onclick="setTime(5)">5s</button>
+<button onclick="setTime(10)">10s</button>
+<button onclick="setTime(15)">15s</button>
+<button onclick="setTime(20)">20s</button>
+<button onclick="setTime(50)">50s</button>
+<button onclick="setTime(60)">1min</button>
+</div>
+
+<div id="clickBox">Click Here!</div>
+    <button class="start-btn" onclick="startTest()">Start Test</button>
+
+    <div class="stats">
+        <p>Time Left: <span id="time">0</span>s</p>
+        <p>Total Clicks: <span id="clicks">0</span></p>
+        <p>CPS: <span id="cps">0</span></p>
+        <p>WPM: <span id="wpm">0</span></p>
+    </div>
+
+    <div id="countdownOverlay">3</div>
+</div>
+
+
+
+<audio id="clickSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
+<audio id="nasheedSound" src="0301.mp3"></audio>
+
+<script>
+let totalTime = 5;
+let clicks = 0;
+let testActive = false;
+let startTime = 0;
+let timer;
+
+const clickBox = document.getElementById("clickBox");
+const timeDisplay = document.getElementById("time");
+const clicksDisplay = document.getElementById("clicks");
+const cpsDisplay = document.getElementById("cps");
+const wpmDisplay = document.getElementById("wpm");
+const countdownOverlay = document.getElementById("countdownOverlay");
+
+const clickSound = document.getElementById("clickSound");
+const nasheedSound = document.getElementById("nasheedSound");
+
+function speak(text) {
+    let msg = new SpeechSynthesisUtterance(text);
+    speechSynthesis.cancel();
+    speechSynthesis.speak(msg);
+}
+
+function setTime(seconds) {
+    totalTime = seconds;
+    timeDisplay.innerText = totalTime;
+}
+
+function startTest() {
+    clicks = 0;
+    testActive = false;
+
+    clicksDisplay.innerText = 0;
+    cpsDisplay.innerText = 0;
+    wpmDisplay.innerText = 0;
+
+    let count = 3;
+    countdownOverlay.style.display = "flex";
+    countdownOverlay.innerText = count;
+
+    let countdownInterval = setInterval(() => {
+        speak(count.toString());
+        count--;
+
+        if(count > 0){
+            countdownOverlay.innerText = count;
+        } else {
+            clearInterval(countdownInterval);
+            countdownOverlay.style.display = "none";
+
+            speak("Go");
+
+            // 🎧 START MUSIC
+            nasheedSound.currentTime = 0;
+            nasheedSound.play().catch(()=>{});
+
+            startTime = Date.now();
+            beginTest();
+        }
+    }, 1000);
+}
+
+function beginTest() {
+    testActive = true;
+
+    timer = setInterval(() => {
+        let elapsed = (Date.now() - startTime) / 1000;
+        let timeLeft = Math.max(0, totalTime - elapsed);
+
+        timeDisplay.innerText = timeLeft.toFixed(2);
+
+        if(elapsed > 0){
+            cpsDisplay.innerText = (clicks / elapsed).toFixed(2);
+            wpmDisplay.innerText = (clicks * 12 / elapsed).toFixed(2);
+        }
+
+        if(timeLeft <= 0){
+            clearInterval(timer);
+            testActive = false;
+
+            nasheedSound.pause();
+            nasheedSound.currentTime = 0;
+
+            speak("Time up. Your score is " + clicks);
+            celebrate();
+            alert("Clicks: " + clicks);
+        }
+    }, 50);
+}
+
+clickBox.addEventListener("click", () => {
+    if(testActive){
+        clicks++;
+        clicksDisplay.innerText = clicks;
+
+        clickSound.currentTime = 0;
+        clickSound.play().catch(()=>{});
+    }
+});
+
+function celebrate() {
+    for(let i=0;i<150;i++){
+        let c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random()*100+"vw";
+        c.style.background = `hsl(${Math.random()*360},100%,50%)`;
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),3000);
+    }
+}
+</script>
+
+</body>
+</html>
