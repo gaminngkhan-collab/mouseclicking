@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -54,6 +55,7 @@ h1 {
     cursor: pointer;
     transition: 0.2s;
 }
+
 #clickBox:active {
     transform: scale(0.95);
 }
@@ -72,6 +74,7 @@ h1 {
     margin-top: 20px;
 }
 
+/* CEO and CO-FOUNDER */
 #ceoTag {
     position: fixed;
     right: 20px;
@@ -86,7 +89,9 @@ h1 {
     background: rgba(0, 0, 0, 0.65);
     box-shadow: 0 0 15px #ffef96, inset 0 0 10px rgba(255,255,255,0.2);
     text-shadow: 0 0 10px #fff, 0 0 20px #ff9ff3;
+}
 
+/* Countdown */
 #countdownOverlay {
     position: absolute;
     width: 100%;
@@ -98,7 +103,68 @@ h1 {
     font-size: 60px;
 }
 
-/* confetti */
+/* Name Popup */
+#namePopup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.name-box {
+    background: linear-gradient(135deg, #1e1e2f, #3b1d5a);
+    padding: 35px;
+    border-radius: 25px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    border: 2px solid #ffef96;
+    box-shadow: 0 0 30px #ffef96, 0 0 60px #ff9ff3;
+}
+
+.name-box h2 {
+    color: #ffef96;
+}
+
+.name-box input {
+    width: 85%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+}
+
+.name-box button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #1dd1a1, #10ac84);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Result Box */
+#resultBox {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #ff9ff3, #f368e0);
+    border: 2px solid #ffef96;
+    box-shadow: 0 0 25px #ffef96;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Confetti */
 .confetti {
     position: fixed;
     width: 10px;
@@ -106,15 +172,44 @@ h1 {
     top: 0;
     border-radius: 50%;
     animation: fall 3s linear forwards;
+    z-index: 9999;
 }
+
 @keyframes fall {
-    to { transform: translateY(100vh); }
+    to {
+        transform: translateY(100vh);
+    }
 }
 </style>
+
 </head>
 
 <body>
 
+<!-- NAME POPUP -->
+
+<div id="namePopup">
+    <div class="name-box">
+        <h2>🎮 Welcome to Click Speed Test! 🎮</h2>
+        <p>Enter your name to begin</p>
+
+```
+    <input
+        type="text"
+        id="playerName"
+        placeholder="Enter your name"
+        maxlength="30"
+    >
+
+    <br>
+
+    <button onclick="saveName()">🚀 Continue</button>
+</div>
+```
+
+</div>
+
+<!-- CEO AND CO-FOUNDER -->
 
 <div id="ceoTag">
     CEO:- Umar Khan<br>
@@ -122,41 +217,47 @@ h1 {
 </div>
 
 <div class="container">
+
+```
 <h1>Ultimate Click Speed Test</h1>
 
 <div class="time-options">
-<button onclick="setTime(5)">5s</button>
-<button onclick="setTime(10)">10s</button>
-<button onclick="setTime(15)">15s</button>
-<button onclick="setTime(20)">20s</button>
-<button onclick="setTime(50)">50s</button>
-<button onclick="setTime(60)">1min</button>
+    <button onclick="setTime(5)">5s</button>
+    <button onclick="setTime(10)">10s</button>
+    <button onclick="setTime(15)">15s</button>
+    <button onclick="setTime(20)">20s</button>
+    <button onclick="setTime(50)">50s</button>
+    <button onclick="setTime(60)">1min</button>
 </div>
 
 <div id="clickBox">Click Here!</div>
-    <button class="start-btn" onclick="startTest()">Start Test</button>
 
-    <div class="stats">
-        <p>Time Left: <span id="time">0</span>s</p>
-        <p>Total Clicks: <span id="clicks">0</span></p>
-        <p>CPS: <span id="cps">0</span></p>
-        <p>WPM: <span id="wpm">0</span></p>
-    </div>
+<button class="start-btn" onclick="startTest()">Start Test</button>
 
-    <div id="countdownOverlay">3</div>
+<div class="stats">
+    <p>Time Left: <span id="time">0</span>s</p>
+    <p>Total Clicks: <span id="clicks">0</span></p>
+    <p>CPS: <span id="cps">0</span></p>
+    <p>WPM: <span id="wpm">0</span></p>
 </div>
 
+<div id="resultBox"></div>
 
+<div id="countdownOverlay">3</div>
+```
 
-<audio id="clickSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
-<audio id="nasheedSound" src="0301.mp3"></audio>
+</div>
+
+<audio id="clickSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio> <audio id="nasheedSound" src="0301.mp3"></audio>
 
 <script>
+
 let totalTime = 5;
 let clicks = 0;
 let testActive = false;
 let startTime = 0;
 let timer;
+let playerName = "";
 
 const clickBox = document.getElementById("clickBox");
 const timeDisplay = document.getElementById("time");
@@ -168,148 +269,316 @@ const countdownOverlay = document.getElementById("countdownOverlay");
 const clickSound = document.getElementById("clickSound");
 const nasheedSound = document.getElementById("nasheedSound");
 
-function speak(text) {
-    let msg = new SpeechSynthesisUtterance(text);
-    speechSynthesis.cancel();
-    speechSynthesis.speak(msg);
+const namePopup = document.getElementById("namePopup");
+const playerNameInput = document.getElementById("playerName");
+const resultBox = document.getElementById("resultBox");
+
+
+/* SAVE NAME */
+function saveName() {
+
+    let enteredName = playerNameInput.value.trim();
+
+    if (enteredName === "") {
+        alert("⚠️ Please enter your name!");
+        return;
+    }
+
+    /* Only letters and spaces are accepted */
+    if (!/^[a-zA-Z ]+$/.test(enteredName)) {
+        alert("⚠️ Please enter a valid name using letters only!");
+        return;
+    }
+
+    playerName = enteredName;
+
+    /* CLOSE POPUP */
+    namePopup.style.display = "none";
+
+    speak("Welcome " + playerName);
 }
+
+
+/* Press Enter to continue */
+playerNameInput.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        saveName();
+    }
+
+});
+
+
+function speak(text) {
+
+    let msg = new SpeechSynthesisUtterance(text);
+
+    speechSynthesis.cancel();
+
+    speechSynthesis.speak(msg);
+
+}
+
 
 function setTime(seconds) {
+
     totalTime = seconds;
+
     timeDisplay.innerText = totalTime;
+
 }
 
+
 function startTest() {
+
+    if (playerName === "") {
+
+        alert("⚠️ Please enter your name first!");
+
+        return;
+
+    }
+
     clicks = 0;
+
     testActive = false;
 
     clicksDisplay.innerText = 0;
     cpsDisplay.innerText = 0;
     wpmDisplay.innerText = 0;
 
+    resultBox.style.display = "none";
+
     let count = 3;
+
     countdownOverlay.style.display = "flex";
+
     countdownOverlay.innerText = count;
 
     let countdownInterval = setInterval(() => {
+
         speak(count.toString());
+
         count--;
 
-        if(count > 0){
+        if (count > 0) {
+
             countdownOverlay.innerText = count;
+
         } else {
+
             clearInterval(countdownInterval);
+
             countdownOverlay.style.display = "none";
 
             speak("Go");
 
-            // 🎧 START MUSIC
             nasheedSound.currentTime = 0;
-            nasheedSound.play().catch(()=>{});
+
+            nasheedSound.play().catch(() => {});
 
             startTime = Date.now();
+
             beginTest();
+
         }
+
     }, 1000);
+
 }
 
+
 function beginTest() {
+
     testActive = true;
 
     timer = setInterval(() => {
+
         let elapsed = (Date.now() - startTime) / 1000;
+
         let timeLeft = Math.max(0, totalTime - elapsed);
 
         timeDisplay.innerText = timeLeft.toFixed(2);
 
-        if(elapsed > 0){
-            cpsDisplay.innerText = (clicks / elapsed).toFixed(2);
-            wpmDisplay.innerText = (clicks * 12 / elapsed).toFixed(2);
+        if (elapsed > 0) {
+
+            cpsDisplay.innerText =
+                (clicks / elapsed).toFixed(2);
+
+            wpmDisplay.innerText =
+                (clicks * 12 / elapsed).toFixed(2);
+
         }
 
-        if(timeLeft <= 0){
+        if (timeLeft <= 0) {
+
             clearInterval(timer);
+
             testActive = false;
 
             nasheedSound.pause();
+
             nasheedSound.currentTime = 0;
 
-            speak("Time up. Your score is " + clicks);
+            speak(
+                "Time up. " +
+                playerName +
+                " scored " +
+                clicks +
+                " clicks!"
+            );
+
+            resultBox.innerHTML = `
+                🏆 ${playerName} scored ${clicks} clicks! 🎉
+            `;
+
+            resultBox.style.display = "block";
+
             celebrate();
-            alert("Clicks: " + clicks);
+
         }
+
     }, 50);
+
 }
 
+
 clickBox.addEventListener("click", () => {
-    if(testActive){
+
+    if (testActive) {
+
         clicks++;
+
         clicksDisplay.innerText = clicks;
 
         clickSound.currentTime = 0;
-        clickSound.play().catch(()=>{});
+
+        clickSound.play().catch(() => {});
+
     }
+
 });
 
+
 function celebrate() {
-    // Create confetti
-    for(let i = 0; i < 200; i++) {
+
+    /* CONFETTI */
+
+    for (let i = 0; i < 200; i++) {
+
         let c = document.createElement("div");
+
         c.className = "confetti";
-        c.style.left = Math.random() * 100 + "vw";
-        c.style.top = Math.random() * 50 + "vh";
-        c.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-        c.style.animationDuration = (2 + Math.random() * 1) + "s";
+
+        c.style.left =
+            Math.random() * 100 + "vw";
+
+        c.style.top =
+            Math.random() * 50 + "vh";
+
+        c.style.background =
+            `hsl(${Math.random() * 360}, 100%, 50%)`;
+
+        c.style.animationDuration =
+            (2 + Math.random() * 1) + "s";
 
         document.body.appendChild(c);
 
         setTimeout(() => c.remove(), 3000);
+
     }
 
-    // Firework explosions
-    for(let i = 0; i < 8; i++) {
+
+    /* FIREWORKS */
+
+    for (let i = 0; i < 8; i++) {
+
         setTimeout(() => {
+
             createFirework(
                 Math.random() * window.innerWidth,
                 Math.random() * window.innerHeight * 0.7
             );
+
         }, i * 300);
+
     }
+
 }
 
+
 function createFirework(x, y) {
-    for(let i = 0; i < 40; i++) {
+
+    for (let i = 0; i < 40; i++) {
+
         let spark = document.createElement("div");
 
         spark.style.position = "fixed";
+
         spark.style.left = x + "px";
+
         spark.style.top = y + "px";
+
         spark.style.width = "6px";
+
         spark.style.height = "6px";
+
         spark.style.borderRadius = "50%";
-        spark.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+
+        spark.style.background =
+            `hsl(${Math.random() * 360}, 100%, 50%)`;
+
         spark.style.pointerEvents = "none";
+
         spark.style.zIndex = "9999";
 
         document.body.appendChild(spark);
 
-        let angle = Math.random() * Math.PI * 2;
-        let distance = 50 + Math.random() * 120;
+        let angle =
+            Math.random() * Math.PI * 2;
 
-        spark.animate([
-            { transform: "translate(0, 0)", opacity: 1 },
+        let distance =
+            50 + Math.random() * 120;
+
+        spark.animate(
+
+            [
+
+                {
+                    transform: "translate(0, 0)",
+                    opacity: 1
+                },
+
+                {
+
+                    transform:
+                        `translate(
+                            ${Math.cos(angle) * distance}px,
+                            ${Math.sin(angle) * distance}px
+                        )`,
+
+                    opacity: 0
+
+                }
+
+            ],
+
             {
-                transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`,
-                opacity: 0
+
+                duration: 1500,
+
+                easing: "ease-out"
+
             }
-        ], {
-            duration: 1500,
-            easing: "ease-out"
-        });
+
+        );
 
         setTimeout(() => spark.remove(), 1600);
+
     }
+
 }
+
 </script>
 
 </body>
