@@ -252,13 +252,62 @@ clickBox.addEventListener("click", () => {
 });
 
 function celebrate() {
-    for(let i=0;i<150;i++){
+    // Create confetti
+    for(let i = 0; i < 200; i++) {
         let c = document.createElement("div");
         c.className = "confetti";
-        c.style.left = Math.random()*100+"vw";
-        c.style.background = `hsl(${Math.random()*360},100%,50%)`;
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.top = Math.random() * 50 + "vh";
+        c.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        c.style.animationDuration = (2 + Math.random() * 1) + "s";
+
         document.body.appendChild(c);
-        setTimeout(()=>c.remove(),3000);
+
+        setTimeout(() => c.remove(), 3000);
+    }
+
+    // Firework explosions
+    for(let i = 0; i < 8; i++) {
+        setTimeout(() => {
+            createFirework(
+                Math.random() * window.innerWidth,
+                Math.random() * window.innerHeight * 0.7
+            );
+        }, i * 300);
+    }
+}
+
+function createFirework(x, y) {
+    for(let i = 0; i < 40; i++) {
+        let spark = document.createElement("div");
+
+        spark.style.position = "fixed";
+        spark.style.left = x + "px";
+        spark.style.top = y + "px";
+        spark.style.width = "6px";
+        spark.style.height = "6px";
+        spark.style.borderRadius = "50%";
+        spark.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        spark.style.pointerEvents = "none";
+        spark.style.zIndex = "9999";
+
+        document.body.appendChild(spark);
+
+        let angle = Math.random() * Math.PI * 2;
+        let distance = 50 + Math.random() * 120;
+
+        spark.animate([
+            { transform: "translate(0, 0)", opacity: 1 },
+            {
+                transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`,
+                opacity: 0
+            }
+        ], {
+            duration: 1500,
+            easing: "ease-out"
+        });
+
+        setTimeout(() => spark.remove(), 1600);
     }
 }
 </script>
