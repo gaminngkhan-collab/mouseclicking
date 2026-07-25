@@ -234,6 +234,16 @@ h1 {
 
 <button class="start-btn" onclick="startTest()">Start Test</button>
 
+<p id="selectedTime" style="
+margin-top:15px;
+font-size:20px;
+font-weight:bold;
+color:#ffef96;
+text-shadow:0 0 10px gold;
+">
+⏱️ Selected Time: 5 Seconds
+</p>
+
 <div class="stats">
     <p>Time Left: <span id="time">0</span>s</p>
     <p>Total Clicks: <span id="clicks">0</span></p>
@@ -326,8 +336,9 @@ function setTime(seconds) {
 
     timeDisplay.innerText = totalTime;
 
+    document.getElementById("selectedTime").innerHTML =
+        `⏱️ Selected Time: <b>${seconds >= 60 ? "1 Minute" : seconds + " Seconds"}</b>`;
 }
-
 
 function startTest() {
 
