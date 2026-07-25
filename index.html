@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Ultimate Click Speed Test</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -180,6 +180,153 @@ h1 {
         transform: translateY(100vh);
     }
 }
+
+/* =========================
+   MOBILE RESPONSIVE DESIGN
+========================= */
+
+@media screen and (max-width:768px){
+
+body{
+
+    padding:15px;
+    display:block;
+    overflow-x:hidden;
+
+}
+
+.container{
+
+    width:95%;
+    max-width:100%;
+    margin:20px auto;
+    padding:20px;
+
+}
+
+h1{
+
+    font-size:28px;
+
+}
+
+/* Time buttons */
+
+.time-options{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:10px;
+
+}
+
+.time-options button{
+
+    width:100%;
+    margin:0;
+    font-size:16px;
+    padding:14px;
+
+}
+
+/* Click Box */
+
+#clickBox{
+
+    padding:35px;
+    font-size:22px;
+
+}
+
+/* Start Button */
+
+.start-btn{
+
+    width:100%;
+    font-size:18px;
+
+}
+
+/* Stats */
+
+.stats p{
+
+    font-size:18px;
+
+}
+
+/* CEO BOX */
+
+#ceoTag{
+
+    position:relative;
+
+    top:auto;
+    right:auto;
+    left:auto;
+
+    transform:none;
+
+    width:90%;
+
+    margin:20px auto;
+
+    text-align:center;
+
+    font-size:16px;
+
+}
+
+/* Popup */
+
+.name-box{
+
+    width:90%;
+
+    padding:25px;
+
+}
+
+.name-box input{
+
+    width:90%;
+
+}
+
+.name-box button{
+
+    width:100%;
+
+}
+
+/* Countdown */
+
+#countdownOverlay{
+
+    font-size:70px;
+
+}
+
+/* Result */
+
+#resultBox{
+
+    font-size:18px;
+
+}
+
+/* Leaderboard (if you add it later) */
+
+#leaderboard{
+
+    padding:15px;
+
+}
+
+}
+
 </style>
 
 </head>
